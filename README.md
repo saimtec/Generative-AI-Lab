@@ -1,97 +1,145 @@
 # Generative AI Lab
 
-This repository is my hands-on Generative AI learning workspace. It contains
-small experiments, notebooks, and working examples that I build while learning
-how modern AI applications are designed.
+This repository contains my hands-on Generative AI learning projects. It
+includes small notebooks and practical examples built while learning how
+language models, tools, agents, workflows, retrieval systems, and evaluations
+work.
 
-The focus is on understanding the fundamentals first and then connecting them
-into more useful systems.
+The code is intentionally organised by topic so each example can be opened,
+read, changed, and run independently.
 
-## What is included
+## Topics
 
-### LangChain
-
-Examples covering model integration, messages, tool calling, structured output,
-middleware, and memory.
-
-### LangGraph
-
-Examples of graph-based applications, chatbots, and human-feedback workflows.
-
-### RAG
-
-Traditional retrieval-augmented generation examples using documents and PDFs.
-
-### Vectorless RAG
-
-A tree-based RAG system that:
-
-1. Extracts text from a document while preserving page numbers.
-2. Uses Gemini to create a table-of-contents-style JSON tree.
-3. Selects relevant sections for a user question.
-4. Retrieves the original pages.
-5. Generates an answer with page citations.
-
-### MCP
-
-Small Model Context Protocol servers and clients, including tool-based examples.
-
-### Planned work
-
-- Deep agent workflows
+- LangChain fundamentals and model integration
+- Tool calling and structured output
+- LangGraph workflows and human feedback
+- Retrieval-augmented generation
+- Model Context Protocol (MCP)
+- Agents and deep-agent workflows
 - Multi-agent systems
-- Long-term and short-term memory
-- LLM evaluation and benchmarking
-- Tracing and observability
-- Reliable tool use and structured outputs
+- Memory and state management
+- LLM evaluation and observability
 
 ## Repository layout
 
 ```text
 .
-├── Langchain/       # LangChain experiments
+├── Langchain/       # LangChain notebooks and examples
 ├── Langgraph/       # LangGraph workflows
-├── MCP/             # Model Context Protocol examples
-├── Rag/             # Traditional RAG experiments
-├── Vectorless Rag/  # Tree-based vectorless RAG
-├── data/            # Local data; ignored by Git
-└── pyproject.toml   # Project dependencies
+├── MCP/             # MCP servers and clients
+├── Rag/             # RAG experiments
+├── experiments/     # Additional experiments
+├── pyproject.toml   # Project dependencies
+└── requirement.txt  # Alternative dependency list
 ```
 
 ## Requirements
 
 - Python 3.11 or newer
-- A virtual environment
-- API keys for the providers used by an example
+- Git
+- An API key for the model provider used by an example
+- `uv` is recommended for dependency management
 
-Install the project dependencies with:
+## Installation
+
+Clone the repository and enter the project directory:
+
+```powershell
+git clone https://github.com/saimtec/Generative-AI-Lab.git
+Set-Location "Generative-AI-Lab"
+```
+
+Create the environment and install dependencies:
 
 ```powershell
 uv sync
 ```
 
-Create a local `.env` file when an example needs an API key. Keep credentials
-out of notebooks and source code. The `.env` file, PDFs, local data, and
-generated files are ignored by Git.
+If you do not use `uv`, create a virtual environment and install the
+dependencies from `requirement.txt`.
 
-## Running the vectorless RAG example
+## API configuration
 
-Run these commands from the repository root in PowerShell:
-
-```powershell
-& ".\.venv\Scripts\python.exe" "Vectorless Rag\scripts\extract_pages.py" "Vectorless Rag\PDF\your-paper.pdf" -o "Vectorless Rag\data\pages.json"
-```
+Copy `.env.example` to `.env`:
 
 ```powershell
-& ".\.venv\Scripts\python.exe" "Vectorless Rag\scripts\build_tree.py" "Vectorless Rag\data\pages.json" -o "Vectorless Rag\data\tree.json"
+Copy-Item ".env.example" ".env"
 ```
 
-```powershell
-& ".\.venv\Scripts\python.exe" "Vectorless Rag\scripts\query_tree.py" "What is the main contribution of this research?"
+Then add your own keys to `.env`. Never put real keys in notebooks, Python
+files, or commits.
+
+### Gemini
+
+```env
+GOOGLE_API_KEY=your_gemini_api_key
+GOOGLE_GENAI_MODEL=gemini-2.5-flash
 ```
+
+### Groq
+
+```env
+GROQ_API_KEY=your_groq_api_key
+```
+
+### OpenAI
+
+```env
+OPENAI_API_KEY=your_openai_api_key
+```
+
+### Ollama
+
+Ollama runs locally and normally does not require an API key:
+
+```env
+OLLAMA_MODEL=your_local_model
+OLLAMA_HOST=http://localhost:11434
+```
+
+Start Ollama separately and make sure the selected model is installed.
+
+### Optional LangSmith tracing
+
+```env
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=your_langsmith_api_key
+LANGCHAIN_PROJECT=generative-ai-lab
+```
+
+Only add optional variables when the example requires them.
+
+## Running examples
+
+### Jupyter notebooks
+
+```powershell
+uv run jupyter notebook
+```
+
+Open the notebook for the topic you want to study and run its cells from top
+to bottom.
+
+### Python examples
+
+Run a Python file from the repository root:
+
+```powershell
+uv run python "MCP\main.py"
+```
+
+The exact command may differ between examples. Check the first cells of the
+related notebook or the file itself for provider and environment requirements.
+
+## Keeping data private
+
+Local API keys, PDFs, downloaded documents, generated indexes, caches, and
+other local data are ignored by Git. Check `.gitignore` before adding new
+datasets or generated files.
 
 ## Learning approach
 
-Each folder is a practical step in the learning process. The examples are kept
-small so that the code can be read, run, changed, and tested instead of being
-treated as a black box.
+The projects are built progressively: start with model calls, then learn tools
+and structured responses, followed by workflows, retrieval, agents, and
+evaluation. Each example is meant to be a starting point for experimentation,
+not a finished production framework.
