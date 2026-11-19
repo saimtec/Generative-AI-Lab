@@ -1,0 +1,30 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local credentials
+.env
+.env.*
+!.env.example
+
+# Local documents and generated indexes
+*.pdf
+**/PDF/
+**/data/
+**/faiss_index/
+**/chroma/
+*.faiss
+*.pkl
+
+# Notebook and operating-system files
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+*.log
